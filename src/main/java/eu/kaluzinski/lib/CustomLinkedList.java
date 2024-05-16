@@ -14,6 +14,10 @@ import java.util.stream.Stream;
 
 public class CustomLinkedList<T> implements List<T> {
 
+  private Node<T> tail;
+  private Node<T> head;
+  private int length;
+
   @Override
   public int size() {
     return 0;
@@ -21,7 +25,7 @@ public class CustomLinkedList<T> implements List<T> {
 
   @Override
   public boolean isEmpty() {
-    return false;
+    return true;
   }
 
   @Override
