@@ -25,9 +25,14 @@ public class MonefyImporter {
   }
 
   private List<List<String>> sanitizeMonefyImportData(List<List<String>> rawImportData) {
-    if (!rawImportData.isEmpty() && !rawImportData.get(0).isEmpty()) {
-      var firstHeader = rawImportData.get(0).get(0);
-      rawImportData.get(0).set(0, removeUTF8BOM(firstHeader));
+    if (rawImportData.isEmpty()) {
+      return rawImportData;
+    }
+
+    var header = rawImportData.get(0);
+    if (!header.isEmpty()) {
+      var firstHeader = header.get(0);
+      header.set(0, removeUTF8BOM(firstHeader));
     }
     return rawImportData;
   }
