@@ -124,10 +124,7 @@ public class CustomLinkedList<T> implements List<T> {
 
   @Override
   public T get(int index) {
-    if (index < 0 || index >= size()) {
-      throw new NoSuchElementException(
-          "No element at index %d. List size is %d".formatted(index, size()));
-    }
+    verifyListSize(index);
 
     if (index == 0) {
       return getHead();
@@ -137,12 +134,16 @@ public class CustomLinkedList<T> implements List<T> {
       return getTail();
     }
 
+    return getNode(index).value;
+  }
+
+  private Node<T> getNode(int index) {
     var temp = head;
     for (int i = 0; i < index; ++i) {
       temp = temp.next;
     }
 
-    return temp.value;
+    return temp;
   }
 
   public T getHead() {
@@ -155,7 +156,12 @@ public class CustomLinkedList<T> implements List<T> {
 
   @Override
   public T set(int index, T element) {
-    return null;
+    verifyListSize(index);
+    var temp = getNode(index);
+    if (temp != null) {
+      temp.value = element;
+    }
+    return element;
   }
 
   @Override
@@ -207,4 +213,12 @@ public class CustomLinkedList<T> implements List<T> {
   public Stream<T> parallelStream() {
     return List.super.parallelStream();
   }
+
+  private void verifyListSize(int index) {
+    if (index < 0 || index >= size()) {
+      throw new IndexOutOfBoundsException(
+          "No element at index %d. List size is %d".formatted(index, size()));
+    }
+  }
+
 }

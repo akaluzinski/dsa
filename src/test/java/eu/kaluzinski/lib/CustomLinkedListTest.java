@@ -53,20 +53,54 @@ class CustomLinkedListTest {
   @Test
   void shouldThrowAnExceptionWhileGettingIncorrectElement() {
     var list = new CustomLinkedList<Integer>();
-    assertThrows(NoSuchElementException.class,
+    assertThrows(IndexOutOfBoundsException.class,
         () -> list.get(0),
         "Expected NoSuchElementException wasn't thrown"
     );
 
     list.add(Integer.valueOf(4));
-    assertThrows(NoSuchElementException.class,
+    assertThrows(IndexOutOfBoundsException.class,
         () -> list.get(-1),
         "Expected NoSuchElementException wasn't thrown"
     );
-    assertThrows(NoSuchElementException.class,
+    assertThrows(IndexOutOfBoundsException.class,
         () -> list.get(2),
         "Expected NoSuchElementException wasn't thrown"
     );
 
+  }
+
+  @Test
+  void shouldSetNthElementsOfTheList() {
+    var firstElement = 4;
+    var secondElement = 5;
+    var thirdElement = 1;
+    var newSecondElementValue = 11;
+    var list = new CustomLinkedList<Integer>();
+
+    list.add(firstElement);
+    list.add(secondElement);
+    list.add(thirdElement);
+
+    var result = list.set(1, newSecondElementValue);
+
+    assertEquals(newSecondElementValue, result);
+    assertEquals(firstElement, list.get(0));
+    assertEquals(newSecondElementValue, list.get(1));
+    assertEquals(thirdElement, list.get(2));
+  }
+
+  @Test
+  void shouldThrowAnExceptionWhileSettingIncorrectElement() {
+    var list = new CustomLinkedList<Integer>();
+    assertThrows(IndexOutOfBoundsException.class,
+        () -> list.set(0, 11),
+        "Expected NoSuchElementException wasn't thrown"
+    );
+    list.add(1);
+    assertThrows(IndexOutOfBoundsException.class,
+        () -> list.set(1, 11),
+        "Expected NoSuchElementException wasn't thrown"
+    );
   }
 }
