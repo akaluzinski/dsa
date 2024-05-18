@@ -18,11 +18,22 @@ public class MonefyImporter {
           .map(line -> Arrays.asList(line.split(DELIMITER)))
           .toList();
 
-      return records;
+      return sanitizeMonefyImportData(records);
     } catch (IOException e) {
       throw new RuntimeException("Import of %s failed.".formatted(path), e);
     }
   }
 
+  private List<List<String>> sanitizeMonefyImportData(List<List<String>> rawImportData) {
+    if (!rawImportData.isEmpty() && !rawImportData.get(0).isEmpty()) {
+      var firstHeader = rawImportData.get(0).get(0);
+      rawImportData.get(0).set(0, removeUTF8BOM(firstHeader));
+    }
+    return rawImportData;
+  }
+
+  private String removeUTF8BOM(String s) {
+    return s.startsWith(UTF8_BOM) ? s.substring(1) : s;
+  }
 
 }
