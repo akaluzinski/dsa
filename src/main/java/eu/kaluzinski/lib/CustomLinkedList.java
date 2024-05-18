@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
@@ -20,12 +21,12 @@ public class CustomLinkedList<T> implements List<T> {
 
   @Override
   public int size() {
-    return 0;
+    return length;
   }
 
   @Override
   public boolean isEmpty() {
-    return true;
+    return size() == 0;
   }
 
   @Override
@@ -59,8 +60,16 @@ public class CustomLinkedList<T> implements List<T> {
   }
 
   @Override
-  public boolean add(T t) {
-    return false;
+  public boolean add(T value) {
+    var newNode = new Node<T>(value);
+    if (isEmpty()) {
+      head = newNode;
+    } else {
+      tail.next = newNode;
+    }
+    tail = newNode;
+    ++length;
+    return true;
   }
 
   @Override
@@ -115,7 +124,33 @@ public class CustomLinkedList<T> implements List<T> {
 
   @Override
   public T get(int index) {
-    return null;
+    if (index < 0 || index >= size()) {
+      throw new NoSuchElementException(
+          "No element at index %d. List size is %d".formatted(index, size()));
+    }
+
+    if (index == 0) {
+      return getHead();
+    }
+
+    if (index == size() - 1) {
+      return getTail();
+    }
+
+    var temp = head;
+    for (int i = 0; i < index; ++i) {
+      temp = temp.next;
+    }
+
+    return temp.value;
+  }
+
+  public T getHead() {
+    return head.value;
+  }
+
+  public T getTail() {
+    return tail.value;
   }
 
   @Override
