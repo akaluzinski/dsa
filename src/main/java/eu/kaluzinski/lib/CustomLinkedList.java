@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.NoSuchElementException;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.IntFunction;
@@ -171,7 +170,30 @@ public class CustomLinkedList<T> implements List<T> {
 
   @Override
   public T remove(int index) {
-    return null;
+    verifyListSize(index);
+
+    if (index == 0) {
+      return removeFirst();
+    }
+
+    var previous = getNode(index - 1);
+    var temp = previous.next;
+    previous.next = temp.next;
+    temp.next = null;
+    length--;
+    return temp.value;
+  }
+
+  public T removeFirst() {
+    var temp = head;
+    head = head.next;
+    temp.next = null;
+    length--;
+    if (isEmpty()) {
+      tail = null;
+    }
+
+    return temp.value;
   }
 
   @Override

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 
 class CustomLinkedListTest {
@@ -88,6 +87,38 @@ class CustomLinkedListTest {
     assertEquals(firstElement, list.get(0));
     assertEquals(newSecondElementValue, list.get(1));
     assertEquals(thirdElement, list.get(2));
+  }
+
+
+  @Test
+  void shouldRemoveFirstElementOfTheList() {
+    var list = new CustomLinkedList<Integer>();
+    list.add(3);
+    list.add(4);
+
+    assertEquals(3, list.removeFirst());
+    assertEquals(4, list.removeFirst());
+
+    assertTrue(list.isEmpty());
+  }
+
+  @Test
+  void shouldRemoveElementsOfTheListOneByOne() {
+    var list = new CustomLinkedList<Integer>();
+    list.add(3);
+    list.add(4);
+    list.add(1);
+    list.add(1);
+    list.add(14);
+
+    assertEquals(1, list.remove(2));
+    assertEquals(3, list.remove(0));
+    assertEquals(1, list.remove(1));
+    assertEquals(14, list.remove(1));
+    assertEquals(4, list.remove(0));
+
+    assertEquals(0, list.size());
+    assertTrue(list.isEmpty());
   }
 
   @Test
