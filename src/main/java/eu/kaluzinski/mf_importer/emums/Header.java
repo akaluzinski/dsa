@@ -8,7 +8,7 @@ public enum Header {
   CATEGORY("category"),
   CURRENCY("currency"),
   CONVERTED_AMOUNT("converted amount"),
-  CONVERTED_CURRENCY("currency"),
+  CONVERTED_CURRENCY("converted currency"),
   DESCRIPTION("description");
 
 
