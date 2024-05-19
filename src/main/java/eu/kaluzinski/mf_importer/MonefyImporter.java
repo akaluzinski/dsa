@@ -20,7 +20,7 @@ public class MonefyImporter {
 
       return sanitizeMonefyImportData(records);
     } catch (IOException e) {
-      throw new RuntimeException("Import of %s failed.".formatted(path), e);
+      throw new RuntimeException("Import of %name failed.".formatted(path), e);
     }
   }
 

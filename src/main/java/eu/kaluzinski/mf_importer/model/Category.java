@@ -1,5 +1,5 @@
 package eu.kaluzinski.mf_importer.model;
 
-public record Category() {
+public record Category(String name) {
 
 }

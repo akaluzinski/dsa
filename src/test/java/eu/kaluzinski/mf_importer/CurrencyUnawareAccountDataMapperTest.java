@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Test;
 
 class CurrencyUnawareAccountDataMapperTest {
 
-  private static final CurrencyUnawareAccountDataMapper testedUnit = new CurrencyUnawareAccountDataMapper();
+  private static final CurrencyUnawareAccountDataMapper testedUnit = new CurrencyUnawareAccountDataMapper(
+      new CurrencyUnawareHeaderMapper());
 
   @Test
   void shouldMapImportDataToAccountState() {
@@ -30,12 +31,12 @@ class CurrencyUnawareAccountDataMapperTest {
 
     //then
     var expectedIncomes = List.of(
-        new AccountEntry(LocalDate.of(2024, 1, 1), new Category(), 10000.0, "")
+        new AccountEntry(LocalDate.of(2024, 1, 1), new Category("Salary"), 10000.0, "")
     );
     var expectedOutcomes = List.of(
-        new AccountEntry(LocalDate.of(2024, 1, 16), new Category(), 2210.0, "Housing"),
-        new AccountEntry(LocalDate.of(2024, 2, 1), new Category(), 119.0, "Rent"),
-        new AccountEntry(LocalDate.of(2024, 11, 17), new Category(), 140.5, "Tires change")
+        new AccountEntry(LocalDate.of(2024, 1, 16), new Category("Housing"), 2210.0, "Housing"),
+        new AccountEntry(LocalDate.of(2024, 2, 1), new Category("Internet"), 119.0, "Rent"),
+        new AccountEntry(LocalDate.of(2024, 11, 17), new Category("Car"), 140.5, "Tires change")
     );
 
     var expectedAccountState = new AccountState(expectedIncomes, expectedOutcomes);

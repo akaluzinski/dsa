@@ -3,20 +3,28 @@ package eu.kaluzinski.mf_importer;
 import eu.kaluzinski.mf_importer.emums.Header;
 import eu.kaluzinski.mf_importer.model.AccountEntry;
 import eu.kaluzinski.mf_importer.model.AccountState;
-import java.util.ArrayList;
+import eu.kaluzinski.mf_importer.model.Category;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class CurrencyUnawareAccountDataMapper implements AccountDataMapper {
 
-  public AccountState mapImportDataToAccountState(List<List<String>> rawImportData) {
-    var headers = mapRawImportRowToHeaders(rawImportData.get(0));
+  private static final String DATE_FORMAT = "dd.MM.yyyy";
+  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
+  private final HeaderMapper headerMapper;
 
-    var accountEntries = rawImportData.stream().map(
-        rawEntry -> mapRawImportRowToAccountEntry(rawEntry, headers)
+  public CurrencyUnawareAccountDataMapper(HeaderMapper headerMapper) {
+    this.headerMapper = headerMapper;
+  }
+
+  public AccountState mapImportDataToAccountState(List<List<String>> rawImportData) {
+    var headers = headerMapper.mapHeaders(rawImportData.get(0));
+    var headersIndexes = headerMapper.getHeaderIndexes(headers);
+
+    var accountEntries = rawImportData.subList(1, rawImportData.size()).stream().map(
+        rawEntry -> mapRawImportRowToAccountEntry(rawEntry, headersIndexes)
     ).toList();
 
     var accountState = new AccountState(accountEntries, accountEntries);
@@ -24,35 +32,15 @@ public class CurrencyUnawareAccountDataMapper implements AccountDataMapper {
   }
 
   private AccountEntry mapRawImportRowToAccountEntry(List<String> rawImportRow,
-      List<Header> headers) {
+      Map<Header, Integer> headersIndexes) {
 
-    Map<String, Integer> map = IntStream.range(0, headers.size())
-        .boxed()
-        .collect(Collectors.toMap(
-            rawImportRow::get,
-            Function.identity()
-        ));
+    var rawDate = rawImportRow.get(headersIndexes.get(Header.DATE));
+    var parsedDate = LocalDate.parse(rawDate, DATE_FORMATTER);
 
-    return null;
+    var category = new Category(rawImportRow.get(headersIndexes.get(Header.CATEGORY)));
+
+    return new AccountEntry(parsedDate, category, null, null);
   }
 
-  private List<Header> mapRawImportRowToHeaders(List<String> rawImportRow) {
-    return normalizeHeaders(rawImportRow)
-        .stream()
-        .map(String::toUpperCase)
-        .map(cell -> cell.replaceAll(" ", "_"))
-        .map(Header::valueOf)
-        .toList();
-  }
 
-  private List<String> normalizeHeaders(List<String> rawImportRow) {
-    var firstCurrencyIndex = rawImportRow.indexOf(Header.CURRENCY.getName());
-    var lastCurrencyIndex = rawImportRow.lastIndexOf(Header.CURRENCY.getName());
-    if (firstCurrencyIndex == lastCurrencyIndex) {
-      return rawImportRow;
-    }
-    var normalizedHeadersRow = new ArrayList<>(rawImportRow);
-    normalizedHeadersRow.set(lastCurrencyIndex, Header.CONVERTED_CURRENCY.getName());
-    return normalizedHeadersRow;
-  }
 }
