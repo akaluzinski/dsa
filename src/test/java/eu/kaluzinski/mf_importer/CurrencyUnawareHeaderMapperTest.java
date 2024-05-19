@@ -17,12 +17,14 @@ import org.junit.jupiter.api.Test;
 
 class CurrencyUnawareHeaderMapperTest {
 
+  private static final HeaderMapper testedUnit = new CurrencyUnawareHeaderMapper();
+
   @Test
   void shouldMapHeaders() {
     var expectedHeaders = List.of(DATE, ACCOUNT, CATEGORY, AMOUNT, CURRENCY, CONVERTED_AMOUNT,
         CONVERTED_CURRENCY, DESCRIPTION);
 
-    var result = new CurrencyUnawareHeaderMapper().mapHeaders(IMPORT_HEADER);
+    var result = testedUnit.mapHeaders(IMPORT_HEADER);
 
     assertEquals(expectedHeaders, result);
   }
@@ -36,7 +38,7 @@ class CurrencyUnawareHeaderMapperTest {
     expectedIndexes.put(ACCOUNT, 1);
     expectedIndexes.put(CATEGORY, 2);
 
-    var result = new CurrencyUnawareHeaderMapper().getHeaderIndexes(headers);
+    var result = testedUnit.getHeaderIndexes(headers);
 
     assertEquals(expectedIndexes, result);
   }
