@@ -6,6 +6,7 @@ import eu.kaluzinski.mf_importer.model.AccountState;
 import eu.kaluzinski.mf_importer.model.Category;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,17 @@ public class CurrencyUnawareAccountDataMapper implements AccountDataMapper {
         .map(rawEntry -> mapRawImportRowToAccountEntry(rawEntry, headersIndexes))
         .toList();
 
-    var accountState = new AccountState(accountEntries, accountEntries);
+    var accountIncomes = new LinkedList<AccountEntry>();
+    var accountOutcomes = new LinkedList<AccountEntry>();
+    accountEntries.forEach(entry -> {
+      if (entry.amount() >= 0) {
+        accountIncomes.addLast(entry);
+      } else {
+        accountOutcomes.addLast(entry.toAbs());
+      }
+    });
+
+    var accountState = new AccountState(accountIncomes, accountOutcomes);
     return accountState;
   }
 

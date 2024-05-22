@@ -34,8 +34,8 @@ class CurrencyUnawareAccountDataMapperTest {
         new AccountEntry(LocalDate.of(2024, 1, 1), new Category("Salary"), 10000.0, "")
     );
     var expectedOutcomes = List.of(
-        new AccountEntry(LocalDate.of(2024, 1, 16), new Category("Housing"), 2210.0, "Housing"),
-        new AccountEntry(LocalDate.of(2024, 2, 1), new Category("Internet"), 119.0, "Rent"),
+        new AccountEntry(LocalDate.of(2024, 1, 16), new Category("Housing"), 2210.0, "Rent"),
+        new AccountEntry(LocalDate.of(2024, 2, 1), new Category("Internet"), 119.0, "UPC"),
         new AccountEntry(LocalDate.of(2024, 11, 17), new Category("Car"), 140.5, "Tires change")
     );
 
