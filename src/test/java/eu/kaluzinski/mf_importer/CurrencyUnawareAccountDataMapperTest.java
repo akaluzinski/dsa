@@ -1,12 +1,11 @@
 package eu.kaluzinski.mf_importer;
 
 import static eu.kaluzinski.mf_importer.MonefyTestUtils.IMPORT_HEADER;
+import static eu.kaluzinski.mf_importer.MonefyTestUtils.accountIncomeState;
+import static eu.kaluzinski.mf_importer.MonefyTestUtils.accountOutcomeState;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import eu.kaluzinski.mf_importer.model.AccountEntry;
 import eu.kaluzinski.mf_importer.model.AccountState;
-import eu.kaluzinski.mf_importer.model.Category;
-import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -30,16 +29,7 @@ class CurrencyUnawareAccountDataMapperTest {
     var result = testedUnit.mapImportDataToAccountState(normalizedData);
 
     //then
-    var expectedIncomes = List.of(
-        new AccountEntry(LocalDate.of(2024, 1, 1), new Category("Salary"), 10000.0, "")
-    );
-    var expectedOutcomes = List.of(
-        new AccountEntry(LocalDate.of(2024, 1, 16), new Category("Housing"), 2210.0, "Rent"),
-        new AccountEntry(LocalDate.of(2024, 2, 1), new Category("Internet"), 119.0, "UPC"),
-        new AccountEntry(LocalDate.of(2024, 11, 17), new Category("Car"), 140.5, "Tires change")
-    );
-
-    var expectedAccountState = new AccountState(expectedIncomes, expectedOutcomes);
+    var expectedAccountState = new AccountState(accountIncomeState, accountOutcomeState);
     assertEquals(expectedAccountState, result);
   }
 
