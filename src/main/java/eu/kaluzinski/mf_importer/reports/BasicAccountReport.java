@@ -1,8 +1,10 @@
 package eu.kaluzinski.mf_importer.reports;
 
+import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
+import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
+import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
 import static java.util.stream.Collectors.groupingBy;
 
-import eu.kaluzinski.mf_importer.emums.Metric;
 import eu.kaluzinski.mf_importer.model.AccountEntry;
 import eu.kaluzinski.mf_importer.model.AccountState;
 import java.time.YearMonth;
@@ -16,10 +18,21 @@ public class BasicAccountReport implements AccountReport {
 
   @Override
   public Insights create(AccountState accountState) {
-    var totalSpending = new Insight(Metric.TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
-    var spendByMonth = new Insight(Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH, spendByMonth(accountState));
+    var averageSpendByMonth = new Insight(AVERAGE_SPEND_BY_MONTH,
+        averageSpendByMonth(accountState));
+    var totalSpending = new Insight(TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
+    var spendByMonth = new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH, spendByMonth(accountState));
 
-    return new Insights(List.of(totalSpending, spendByMonth));
+    return new Insights(List.of(averageSpendByMonth, totalSpending, spendByMonth));
+  }
+
+  private Double averageSpendByMonth(AccountState accountState) {
+    return spendByMonth(accountState)
+        .entrySet()
+        .parallelStream()
+        .mapToDouble(Entry::getValue)
+        .average()
+        .orElseThrow();
   }
 
   private Double totalSpending(AccountState accountState) {
@@ -40,12 +53,17 @@ public class BasicAccountReport implements AccountReport {
         .collect(groupingBy(element -> YearMonth.from(element.date())));
   }
 
-  //TODO average spend by month
-
   private Double sumAccountEntries(List<AccountEntry> entries) {
     return entries.stream()
         .mapToDouble(AccountEntry::amount)
         .sum();
+  }
+
+  private Double averageAccountEntries(List<AccountEntry> entries) {
+    return entries.stream()
+        .mapToDouble(AccountEntry::amount)
+        .average()
+        .orElseThrow();
   }
 
 }
