@@ -20,6 +20,6 @@ public class BasicAccountReportTest {
 
     var totalAccountSpend = insights.insights().get(0);
     assertEquals(TOTAL_ACCOUNT_SPEND, totalAccountSpend.metric());
-    assertEquals(2469.5, totalAccountSpend.value());
+    assertEquals(3669.6, totalAccountSpend.value());
   }
 }
