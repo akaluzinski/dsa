@@ -18,11 +18,15 @@ class BasicReportFlowTest {
     var path = "%s%s".formatted(RESOURCES_PATH, fileName);
 
     //when
-    var insights = FlowsProvider.basicFlow().importAndGenerate(path);
+    var flow = FlowsProvider.basicFlow();
+    var insightsAccount1 = flow.importAndGenerate(path, "mBank");
+    var insightsAccount2 = flow.importAndGenerate(path, "PKO");
 
-    var expectedInsights = new Insights(List.of(new Insight(TOTAL_ACCOUNT_SPEND, 4869.0)));
+    var expectedInsightsAccount1 = new Insights(List.of(new Insight(TOTAL_ACCOUNT_SPEND, 4869.0)));
+    var expectedInsightsAccount2 = new Insights(List.of(new Insight(TOTAL_ACCOUNT_SPEND, 2519.0)));
 
     //then
-    assertEquals(expectedInsights, insights);
+    assertEquals(expectedInsightsAccount1, insightsAccount1);
+    assertEquals(expectedInsightsAccount2, insightsAccount2);
   }
 }

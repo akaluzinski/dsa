@@ -20,13 +20,15 @@ public class CurrencyUnawareAccountDataMapper implements AccountDataMapper {
     this.headerMapper = headerMapper;
   }
 
-  public AccountState mapImportDataToAccountState(List<List<String>> rawImportData) {
+  public AccountState mapImportDataToAccountState(String accountName,
+      List<List<String>> rawImportData) {
     var headers = headerMapper.mapHeaders(rawImportData.get(0));
     var headersIndexes = headerMapper.getHeaderIndexes(headers);
 
     var accountEntries = rawImportData.subList(1, rawImportData.size())
         .stream()
         .map(rawEntry -> mapRawImportRowToAccountEntry(rawEntry, headersIndexes))
+        .filter(mappedEntry -> mappedEntry.accountName().equals(accountName))
         .toList();
 
     var accountIncomes = new LinkedList<AccountEntry>();
@@ -51,12 +53,13 @@ public class CurrencyUnawareAccountDataMapper implements AccountDataMapper {
     var rawCategory = rawImportRow.get(headersIndexes.get(Header.CATEGORY));
     var rawAmount = rawImportRow.get(headersIndexes.get(Header.AMOUNT));
     var rawDescription = rawImportRow.get(headersIndexes.get(Header.DESCRIPTION));
+    var accountName = rawImportRow.get(headersIndexes.get(Header.ACCOUNT));
 
     var parsedDate = LocalDate.parse(rawDate, DATE_FORMATTER);
     var category = new Category(rawCategory);
     var amount = Double.parseDouble(rawAmount);
 
-    return new AccountEntry(parsedDate, category, amount, rawDescription);
+    return new AccountEntry(parsedDate, category, amount, rawDescription, accountName);
   }
 
 

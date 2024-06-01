@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface AccountDataMapper {
 
-  AccountState mapImportDataToAccountState(List<List<String>> rawImportData);
+  AccountState mapImportDataToAccountState(String accountName, List<List<String>> rawImportData);
 
 }

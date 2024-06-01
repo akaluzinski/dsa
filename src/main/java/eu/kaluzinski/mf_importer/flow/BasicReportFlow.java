@@ -18,9 +18,9 @@ public class BasicReportFlow {
     this.accountReport = accountReport;
   }
 
-  public Insights importAndGenerate(String fileName) {
+  public Insights importAndGenerate(String fileName, String accountName) {
     var rawImportEntries = monefyImporter.rawImportMonefyFile(fileName);
-    var accountState = accountDataMapper.mapImportDataToAccountState(rawImportEntries);
+    var accountState = accountDataMapper.mapImportDataToAccountState(accountName, rawImportEntries);
     return accountReport.create(accountState);
   }
 
