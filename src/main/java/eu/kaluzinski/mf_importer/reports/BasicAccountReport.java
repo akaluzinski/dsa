@@ -9,13 +9,12 @@ public class BasicAccountReport implements AccountReport {
 
   @Override
   public Insights create(AccountState accountState) {
-    var totalMonthSpending = new Insight(Metric.TOTAL_ACCOUNT_SPEND,
-        totalMonthSpending(accountState));
+    var totalSpending = new Insight(Metric.TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
 
-    return new Insights(List.of(totalMonthSpending));
+    return new Insights(List.of(totalSpending));
   }
 
-  Double totalMonthSpending(AccountState accountState) {
+  private Double totalSpending(AccountState accountState) {
     return accountState.expenses().stream()
         .mapToDouble(AccountEntry::amount)
         .sum();
