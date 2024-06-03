@@ -1,5 +1,6 @@
 package eu.kaluzinski.mf_importer.reports;
 
+import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
@@ -18,29 +19,36 @@ public class BasicAccountReport implements AccountReport {
 
   @Override
   public Insights create(AccountState accountState) {
-    var averageSpendByMonth = new Insight(AVERAGE_SPEND_BY_MONTH,
-        averageSpendByMonth(accountState));
-    var totalSpending = new Insight(TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
-    var spendByMonth = new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH, spendByMonth(accountState));
+    var expenses = accountState.expenses();
 
-    return new Insights(List.of(averageSpendByMonth, totalSpending, spendByMonth));
+    var averageSpendByMonth = new Insight(AVERAGE_SPEND_BY_MONTH,
+        averageEntriesValueByMonth(expenses));
+    var averageIncomeByMonth = new Insight(AVERAGE_INCOME_BY_MONTH,
+        averageEntriesValueByMonth(accountState.incomes()));
+    var totalSpending = new Insight(TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
+    var spendByMonth = new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
+        spendByMonth(expenses));
+
+    return new Insights(
+        List.of(averageSpendByMonth, averageIncomeByMonth, totalSpending, spendByMonth));
   }
 
-  private Double averageSpendByMonth(AccountState accountState) {
-    return spendByMonth(accountState)
+  private Double averageEntriesValueByMonth(List<AccountEntry> accountEntries) {
+    return spendByMonth(accountEntries)
         .entrySet()
         .parallelStream()
         .mapToDouble(Entry::getValue)
         .average()
-        .orElseThrow();
+        .orElse(Double.NaN);
   }
 
   private Double totalSpending(AccountState accountState) {
     return sumAccountEntries(accountState.expenses());
   }
 
-  private Map<YearMonth, Double> spendByMonth(AccountState accountState) {
-    return new TreeMap<>(groupAccountEntriesYearMonth(accountState.expenses())
+
+  private Map<YearMonth, Double> spendByMonth(List<AccountEntry> expenses) {
+    return new TreeMap<>(groupAccountEntriesYearMonth(expenses)
         .entrySet()
         .parallelStream()
         .collect(Collectors.toMap(Entry::getKey,

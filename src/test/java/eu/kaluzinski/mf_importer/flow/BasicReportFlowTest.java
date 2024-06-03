@@ -1,6 +1,7 @@
 package eu.kaluzinski.mf_importer.flow;
 
 import static eu.kaluzinski.mf_importer.MonefyTestUtils.RESOURCES_PATH;
+import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
@@ -28,6 +29,7 @@ class BasicReportFlowTest {
 
     var expectedInsightsAccount1 = new Insights(List.of(
         new Insight(AVERAGE_SPEND_BY_MONTH, 1623.0),
+        new Insight(AVERAGE_INCOME_BY_MONTH, 10000.0),
         new Insight(TOTAL_ACCOUNT_SPEND, 4869.0),
         new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
             Map.of(YearMonth.parse("2024-01"), 2210.0,
@@ -36,6 +38,7 @@ class BasicReportFlowTest {
     ));
     var expectedInsightsAccount2 = new Insights(List.of(
         new Insight(AVERAGE_SPEND_BY_MONTH, 1259.5),
+        new Insight(AVERAGE_INCOME_BY_MONTH, Double.NaN),
         new Insight(TOTAL_ACCOUNT_SPEND, 2519.0),
         new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
             Map.of(
