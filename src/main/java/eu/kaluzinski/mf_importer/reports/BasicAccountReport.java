@@ -1,6 +1,7 @@
 package eu.kaluzinski.mf_importer.reports;
 
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_INCOME_BY_MONTH;
+import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SAVINGS_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
@@ -17,20 +18,26 @@ import java.util.stream.Collectors;
 
 public class BasicAccountReport implements AccountReport {
 
+  private static final Double AVERAGE_OF_NO_VALUES = 0.0;
+
   @Override
   public Insights create(AccountState accountState) {
     var expenses = accountState.expenses();
+    var incomes = accountState.incomes();
+    var averageSpendByMonth = averageEntriesValueByMonth(expenses);
+    var averageIncomeByMonth = averageEntriesValueByMonth(incomes);
+    var averageSavingByMonth = averageIncomeByMonth - averageSpendByMonth;
 
-    var averageSpendByMonth = new Insight(AVERAGE_SPEND_BY_MONTH,
-        averageEntriesValueByMonth(expenses));
-    var averageIncomeByMonth = new Insight(AVERAGE_INCOME_BY_MONTH,
-        averageEntriesValueByMonth(accountState.incomes()));
+    var averageSpendByMonthInsight = new Insight(AVERAGE_SPEND_BY_MONTH, averageSpendByMonth);
+    var averageIncomeByMonthInsight = new Insight(AVERAGE_INCOME_BY_MONTH, averageIncomeByMonth);
+    var averageSavingsByMonthInsight = new Insight(AVERAGE_SAVINGS_BY_MONTH, averageSavingByMonth);
     var totalSpending = new Insight(TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
     var spendByMonth = new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
         spendByMonth(expenses));
 
     return new Insights(
-        List.of(averageSpendByMonth, averageIncomeByMonth, totalSpending, spendByMonth));
+        List.of(averageSpendByMonthInsight, averageIncomeByMonthInsight,
+            averageSavingsByMonthInsight, totalSpending, spendByMonth));
   }
 
   private Double averageEntriesValueByMonth(List<AccountEntry> accountEntries) {
@@ -39,7 +46,7 @@ public class BasicAccountReport implements AccountReport {
         .parallelStream()
         .mapToDouble(Entry::getValue)
         .average()
-        .orElse(Double.NaN);
+        .orElse(AVERAGE_OF_NO_VALUES);
   }
 
   private Double totalSpending(AccountState accountState) {
