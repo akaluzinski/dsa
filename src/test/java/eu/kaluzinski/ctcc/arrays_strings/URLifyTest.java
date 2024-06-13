@@ -8,6 +8,6 @@ public class URLifyTest {
 
   @Test
   void shouldUrlEncodeSpaces() {
-    assertEquals("Mr%20John%20Smith", URLify.urlify("Mr John Smith", 13));
+    assertEquals("Mr%20John%20Smith", new URLify().urlify("Mr John Smith", 13));
   }
 }
