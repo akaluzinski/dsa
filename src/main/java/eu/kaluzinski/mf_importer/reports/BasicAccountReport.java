@@ -28,12 +28,11 @@ public class BasicAccountReport implements AccountReport {
     var averageIncomeByMonth = averageEntriesValueByMonth(incomes);
     var averageSavingByMonth = averageIncomeByMonth - averageSpendByMonth;
 
-    var averageSpendByMonthInsight = new Insight(AVERAGE_SPEND_BY_MONTH, averageSpendByMonth);
-    var averageIncomeByMonthInsight = new Insight(AVERAGE_INCOME_BY_MONTH, averageIncomeByMonth);
-    var averageSavingsByMonthInsight = new Insight(AVERAGE_SAVINGS_BY_MONTH, averageSavingByMonth);
-    var totalSpending = new Insight(TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
-    var spendByMonth = new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
-        spendByMonth(expenses));
+    var averageSpendByMonthInsight = Insight.of(AVERAGE_SPEND_BY_MONTH, averageSpendByMonth);
+    var averageIncomeByMonthInsight = Insight.of(AVERAGE_INCOME_BY_MONTH, averageIncomeByMonth);
+    var averageSavingsByMonthInsight = Insight.of(AVERAGE_SAVINGS_BY_MONTH, averageSavingByMonth);
+    var totalSpending = Insight.of(TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
+    var spendByMonth = Insight.of(TOTAL_ACCOUNT_SPEND_BY_MONTH, spendByMonth(expenses));
 
     return new Insights(
         List.of(averageSpendByMonthInsight, averageIncomeByMonthInsight,
