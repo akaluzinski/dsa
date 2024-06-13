@@ -1,7 +1,6 @@
 package eu.kaluzinski.ctcc.arrays_strings;
 
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 public class PalindromeFinder {
 
@@ -10,14 +9,16 @@ public class PalindromeFinder {
       return false;
     }
 
-    var firstSorted = first.toCharArray();
-    Arrays.sort(firstSorted);
+    var firstSorted = sortText(first);
+    var secondSorted = sortText(second);
 
-    var secondSorted = second.toCharArray();
-    Arrays.sort(secondSorted);
+    return firstSorted.equals(secondSorted);
+  }
 
-    return IntStream.range(0, firstSorted.length)
-        .noneMatch(i -> firstSorted[i] != secondSorted[i]);
+  private String sortText(String text) {
+    var characters = text.toCharArray();
+    Arrays.sort(characters);
+    return new String(characters);
   }
 
 }
