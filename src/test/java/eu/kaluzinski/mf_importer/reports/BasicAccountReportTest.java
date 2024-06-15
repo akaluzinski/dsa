@@ -4,6 +4,7 @@ import static eu.kaluzinski.mf_importer.MonefyTestUtils.currencyUnawareAccountEn
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SAVINGS_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
+import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +30,9 @@ public class BasicAccountReportTest {
         new Insight(AVERAGE_SAVINGS_BY_MONTH, 8165.2),
         new Insight(TOTAL_ACCOUNT_SPEND, 3669.6),
         new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
-            Map.of(YearMonth.parse("2024-01"), 2210.0, YearMonth.parse("2024-02"), 1459.6))
+            Map.of(YearMonth.parse("2024-01"), 2210.0, YearMonth.parse("2024-02"), 1459.6)),
+        new Insight(TOTAL_ACCOUNT_INCOME_BY_MONTH,
+            Map.of(YearMonth.parse("2024-01"), 10000.0))
     ), insights.insights());
   }
 }

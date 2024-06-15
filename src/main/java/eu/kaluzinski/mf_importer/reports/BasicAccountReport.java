@@ -3,6 +3,7 @@ package eu.kaluzinski.mf_importer.reports;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SAVINGS_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
+import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
 import static java.util.stream.Collectors.groupingBy;
@@ -32,15 +33,16 @@ public class BasicAccountReport implements AccountReport {
     var averageIncomeByMonthInsight = Insight.of(AVERAGE_INCOME_BY_MONTH, averageIncomeByMonth);
     var averageSavingsByMonthInsight = Insight.of(AVERAGE_SAVINGS_BY_MONTH, averageSavingByMonth);
     var totalSpending = Insight.of(TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
-    var spendByMonth = Insight.of(TOTAL_ACCOUNT_SPEND_BY_MONTH, spendByMonth(expenses));
+    var spendByMonth = Insight.of(TOTAL_ACCOUNT_SPEND_BY_MONTH, entriesGroupedByMonth(expenses));
+    var incomeByMonth = Insight.of(TOTAL_ACCOUNT_INCOME_BY_MONTH, entriesGroupedByMonth(incomes));
 
     return new Insights(
         List.of(averageSpendByMonthInsight, averageIncomeByMonthInsight,
-            averageSavingsByMonthInsight, totalSpending, spendByMonth));
+            averageSavingsByMonthInsight, totalSpending, spendByMonth, incomeByMonth));
   }
 
   private Double averageEntriesValueByMonth(List<AccountEntry> accountEntries) {
-    return spendByMonth(accountEntries)
+    return entriesGroupedByMonth(accountEntries)
         .entrySet()
         .parallelStream()
         .mapToDouble(Entry::getValue)
@@ -53,8 +55,8 @@ public class BasicAccountReport implements AccountReport {
   }
 
 
-  private Map<YearMonth, Double> spendByMonth(List<AccountEntry> expenses) {
-    return new TreeMap<>(groupAccountEntriesYearMonth(expenses)
+  private Map<YearMonth, Double> entriesGroupedByMonth(List<AccountEntry> entries) {
+    return new TreeMap<>(groupAccountEntriesYearMonth(entries)
         .entrySet()
         .parallelStream()
         .collect(Collectors.toMap(Entry::getKey,

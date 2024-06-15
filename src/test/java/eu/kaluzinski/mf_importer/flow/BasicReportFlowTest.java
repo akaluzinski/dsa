@@ -4,8 +4,10 @@ import static eu.kaluzinski.mf_importer.MonefyTestUtils.RESOURCES_PATH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SAVINGS_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
+import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
+import static java.util.Collections.emptyMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import eu.kaluzinski.mf_importer.reports.Insight;
@@ -36,7 +38,9 @@ class BasicReportFlowTest {
         new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
             Map.of(YearMonth.parse("2024-01"), 2210.0,
                 YearMonth.parse("2024-02"), 2519.0,
-                YearMonth.parse("2024-11"), 140.0))
+                YearMonth.parse("2024-11"), 140.0)),
+        new Insight(TOTAL_ACCOUNT_INCOME_BY_MONTH,
+            Map.of(YearMonth.parse("2024-01"), 10000.0))
     ));
     var expectedInsightsAccount2 = new Insights(List.of(
         new Insight(AVERAGE_SPEND_BY_MONTH, 1259.5),
@@ -46,7 +50,8 @@ class BasicReportFlowTest {
         new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
             Map.of(
                 YearMonth.parse("2024-02"), 1319.0,
-                YearMonth.parse("2024-05"), 1200.0))
+                YearMonth.parse("2024-05"), 1200.0)),
+        new Insight(TOTAL_ACCOUNT_INCOME_BY_MONTH, emptyMap())
     ));
 
     //then
