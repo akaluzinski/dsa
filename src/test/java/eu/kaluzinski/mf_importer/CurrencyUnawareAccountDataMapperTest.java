@@ -35,6 +35,7 @@ class CurrencyUnawareAccountDataMapperTest {
     assertEquals(expectedAccountState, result);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   void shouldMapImportNoDataDataToUnknownAccountState() {
     //given
