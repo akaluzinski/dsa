@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="eu.kaluzinski.mf_importer.CurrencyUnawareAccountDataMapperTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-08-26T17:43:43" hostname="fv-az665-713" time="0.044">
-  <properties/>
-  <testcase name="shouldMapImportNoDataDataToUnknownAccountState()" classname="eu.kaluzinski.mf_importer.CurrencyUnawareAccountDataMapperTest" time="0.034"/>
-  <testcase name="shouldMapImportDataToAccountState()" classname="eu.kaluzinski.mf_importer.CurrencyUnawareAccountDataMapperTest" time="0.008"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
