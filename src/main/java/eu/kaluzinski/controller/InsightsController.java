@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class InsightsController {
 
-  @GetMapping("/insights")
+  @GetMapping(value = "/insights", produces = "application/json")
   public String sayHello() {
     var insights = basicFlow().importAndGenerate("src/main/resources/import.csv", "mBank");
     var stringifiedInsights = new JsonConverter().toJson(insights);
