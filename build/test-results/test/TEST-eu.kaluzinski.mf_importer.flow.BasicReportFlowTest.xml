@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="eu.kaluzinski.mf_importer.flow.BasicReportFlowTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-08-26T17:43:43" hostname="fv-az665-713" time="0.029">
-  <properties/>
-  <testcase name="shouldPrepareBasicReport()" classname="eu.kaluzinski.mf_importer.flow.BasicReportFlowTest" time="0.029"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
