@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CurrencyUnawareAccountDataMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">monefyinsights</a> &gt; <a href="index.source.html" class="el_package">eu.kaluzinski.mf_importer</a> &gt; <span class="el_source">CurrencyUnawareAccountDataMapper.java</span></div><h1>CurrencyUnawareAccountDataMapper.java</h1><pre class="source lang-java linenums">package eu.kaluzinski.mf_importer;
+
+import eu.kaluzinski.mf_importer.emums.Header;
+import eu.kaluzinski.mf_importer.model.AccountEntry;
+import eu.kaluzinski.mf_importer.model.AccountState;
+import eu.kaluzinski.mf_importer.model.Category;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+public class CurrencyUnawareAccountDataMapper implements AccountDataMapper {
+
+  private static final String DATE_FORMAT = &quot;dd.MM.yyyy&quot;;
+<span class="fc" id="L16">  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);</span>
+  private final HeaderMapper headerMapper;
+
+<span class="fc" id="L19">  public CurrencyUnawareAccountDataMapper(HeaderMapper headerMapper) {</span>
+<span class="fc" id="L20">    this.headerMapper = headerMapper;</span>
+<span class="fc" id="L21">  }</span>
+
+  public AccountState mapImportDataToAccountState(String accountName,
+      List&lt;List&lt;String&gt;&gt; rawImportData) {
+<span class="fc" id="L25">    var headers = headerMapper.mapHeaders(rawImportData.get(0));</span>
+<span class="fc" id="L26">    var headersIndexes = headerMapper.getHeaderIndexes(headers);</span>
+
+<span class="fc" id="L28">    var accountEntries = rawImportData.subList(1, rawImportData.size())</span>
+<span class="fc" id="L29">        .stream()</span>
+<span class="fc" id="L30">        .map(rawEntry -&gt; mapRawImportRowToAccountEntry(rawEntry, headersIndexes))</span>
+<span class="fc" id="L31">        .filter(mappedEntry -&gt; mappedEntry.accountName().equals(accountName))</span>
+<span class="fc" id="L32">        .toList();</span>
+
+<span class="fc" id="L34">    var accountIncomes = new LinkedList&lt;AccountEntry&gt;();</span>
+<span class="fc" id="L35">    var accountOutcomes = new LinkedList&lt;AccountEntry&gt;();</span>
+<span class="fc" id="L36">    accountEntries.forEach(entry -&gt; {</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">      if (entry.amount() &gt;= 0) {</span>
+<span class="fc" id="L38">        accountIncomes.addLast(entry);</span>
+      } else {
+<span class="fc" id="L40">        accountOutcomes.addLast(entry.toAbs());</span>
+      }
+<span class="fc" id="L42">    });</span>
+
+<span class="fc" id="L44">    var accountState = new AccountState(accountIncomes, accountOutcomes);</span>
+<span class="fc" id="L45">    return accountState;</span>
+  }
+
+  private AccountEntry mapRawImportRowToAccountEntry(List&lt;String&gt; rawImportRow,
+      Map&lt;Header, Integer&gt; headersIndexes) {
+
+    // todo fix duplicates
+<span class="fc" id="L52">    var rawDate = rawImportRow.get(headersIndexes.get(Header.DATE));</span>
+<span class="fc" id="L53">    var rawCategory = rawImportRow.get(headersIndexes.get(Header.CATEGORY));</span>
+<span class="fc" id="L54">    var rawAmount = rawImportRow.get(headersIndexes.get(Header.AMOUNT));</span>
+<span class="fc" id="L55">    var rawDescription = rawImportRow.get(headersIndexes.get(Header.DESCRIPTION));</span>
+<span class="fc" id="L56">    var accountName = rawImportRow.get(headersIndexes.get(Header.ACCOUNT));</span>
+
+<span class="fc" id="L58">    var parsedDate = LocalDate.parse(rawDate, DATE_FORMATTER);</span>
+<span class="fc" id="L59">    var category = new Category(rawCategory);</span>
+<span class="fc" id="L60">    var amount = Double.parseDouble(rawAmount);</span>
+
+<span class="fc" id="L62">    return new AccountEntry(parsedDate, category, amount, rawDescription, accountName);</span>
+  }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

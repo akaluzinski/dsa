@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="eu.kaluzinski.lib.CustomLinkedListTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2024-08-26T17:43:43" hostname="fv-az665-713" time="0.023">
+  <properties/>
+  <testcase name="shouldRemoveFirstElementOfTheList()" classname="eu.kaluzinski.lib.CustomLinkedListTest" time="0.002"/>
+  <testcase name="shouldThrowAnExceptionWhileSettingIncorrectElement()" classname="eu.kaluzinski.lib.CustomLinkedListTest" time="0.002"/>
+  <testcase name="shouldReturnSizeOfEmptyList()" classname="eu.kaluzinski.lib.CustomLinkedListTest" time="0.0"/>
+  <testcase name="shouldSetNthElementsOfTheList()" classname="eu.kaluzinski.lib.CustomLinkedListTest" time="0.001"/>
+  <testcase name="shouldAddNextElementsToTheList()" classname="eu.kaluzinski.lib.CustomLinkedListTest" time="0.005"/>
+  <testcase name="shouldRemoveElementsOfTheListOneByOne()" classname="eu.kaluzinski.lib.CustomLinkedListTest" time="0.001"/>
+  <testcase name="shouldAddFirstElementToTheList()" classname="eu.kaluzinski.lib.CustomLinkedListTest" time="0.001"/>
+  <testcase name="shouldThrowAnExceptionWhileGettingIncorrectElement()" classname="eu.kaluzinski.lib.CustomLinkedListTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="eu.kaluzinski.monefyinsights.MonefyinsightsApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-08-26T17:43:46" hostname="fv-az665-713" time="0.995">
+  <properties/>
+  <testcase name="contextLoads()" classname="eu.kaluzinski.monefyinsights.MonefyinsightsApplicationTests" time="0.995"/>
+  <system-out><![CDATA[17:43:44.117 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [eu.kaluzinski.monefyinsights.MonefyinsightsApplicationTests]: MonefyinsightsApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:43:44.272 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration eu.kaluzinski.monefyinsights.MonefyinsightsApplication for test class eu.kaluzinski.monefyinsights.MonefyinsightsApplicationTests
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.0)
+
+2024-08-26T17:43:44.816Z  INFO 2331 --- [monefyinsights] [    Test worker] e.k.m.MonefyinsightsApplicationTests     : Starting MonefyinsightsApplicationTests using Java 17.0.12 with PID 2331 (started by runner in /home/runner/work/dsa/dsa)
+2024-08-26T17:43:44.819Z  INFO 2331 --- [monefyinsights] [    Test worker] e.k.m.MonefyinsightsApplicationTests     : No active profile set, falling back to 1 default profile: "default"
+2024-08-26T17:43:46.010Z  INFO 2331 --- [monefyinsights] [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2024-08-26T17:43:46.324Z  INFO 2331 --- [monefyinsights] [    Test worker] e.k.m.MonefyinsightsApplicationTests     : Started MonefyinsightsApplicationTests in 1.868 seconds (process running for 3.683)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
