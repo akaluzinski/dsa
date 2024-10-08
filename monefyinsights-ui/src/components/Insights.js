@@ -19,9 +19,12 @@ export default function Insights() {
     fetchInsights()
   }, []);
 
+  const chartId = 'charts_locator'
+
   return <>
-    <div>Insights</div>
-    <LineChart></LineChart>
+    <div id='charts_locator'>Insights</div>
+    {insights.length && <LineChart data={insights} chartId={chartId}
+                                   metric='TOTAL_ACCOUNT_INCOME_BY_MONTH'></LineChart>}
     <div>{JSON.stringify(insights)}</div>
   </>
 
