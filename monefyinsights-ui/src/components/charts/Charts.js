@@ -1,22 +1,28 @@
 import {useEffect} from "react";
-
 import * as d3 from "d3";
 
 const metricDateFormat = "%Y-%m"
 
-export default function LineChart({
-  data: dataPoints,
-  metric: metricToDraw,
+export function MonthlyInsightsChart({insights, chartId, metric}) {
+  return <>
+    <div id={chartId}/>
+    {insights.length && <LineChart dataPoints={insights} chartId={chartId}
+                                   metricName={metric}></LineChart>}
+  </>
+}
+
+function LineChart({
+  dataPoints,
+  metricName,
   chartId
 }) {
   const createGraph = async () => {
     if (dataPoints.length === 0) {
       return <>No data</>
     }
-    console.log('test23')
 
     const rawMetricValue = dataPoints.find(
-        ({metric}) => metric === metricToDraw).value
+        ({metric}) => metric === metricName).value
 
     const data = Object.keys(rawMetricValue)
     .map((date) => ({
@@ -64,7 +70,7 @@ export default function LineChart({
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .style("text-decoration", "underline")
-    .text(metricToDraw);
+    .text(metricName);
   }
 
   useEffect(() => {
