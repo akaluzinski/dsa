@@ -1,11 +1,13 @@
 import {useEffect, useState} from "react";
+import {InsightsApi} from "../model/InsightsApi";
+import {MonthlyInsightsChart} from "./charts/Charts";
 
 export default function Insights() {
   const [insights, setInsights] = useState([])
 
   useEffect(() => {
     async function fetchInsights() {
-      const result = await fetch('http://localhost:8080/insights')
+      const result = await InsightsApi.getInsights()
       if (!result.ok) {
         // todo
       }
@@ -18,8 +20,12 @@ export default function Insights() {
   }, []);
 
   return <>
-    <div>Insights</div>
+    <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_INCOME_BY_MONTH_CHART'}
+                          insights={insights}
+                          metric={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}></MonthlyInsightsChart>
+    <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_SPEND_BY_MONTH_CHART'}
+                          insights={insights}
+                          metric={'TOTAL_ACCOUNT_SPEND_BY_MONTH'}></MonthlyInsightsChart>
     <div>{JSON.stringify(insights)}</div>
   </>
-
 }
