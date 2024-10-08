@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {InsightsApi} from "../model/InsightsApi";
-
-import * as d3 from 'd3'
+import LineChart from "./charts/Charts";
 
 export default function Insights() {
   const [insights, setInsights] = useState([])
@@ -22,7 +21,7 @@ export default function Insights() {
 
   return <>
     <div>Insights</div>
-    <div>{d3.sum([1, 2, 3, -0.5])}</div>
+    <LineChart></LineChart>
     <div>{JSON.stringify(insights)}</div>
   </>
 
