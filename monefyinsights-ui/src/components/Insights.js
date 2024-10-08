@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {InsightsApi} from "../model/InsightsApi";
-import LineChart from "./charts/Charts";
+import {MonthlyInsightsChart} from "./charts/Charts";
 
 export default function Insights() {
   const [insights, setInsights] = useState([])
@@ -19,13 +19,13 @@ export default function Insights() {
     fetchInsights()
   }, []);
 
-  const chartId = 'charts_locator'
-
   return <>
-    <div id='charts_locator'>Insights</div>
-    {insights.length && <LineChart data={insights} chartId={chartId}
-                                   metric='TOTAL_ACCOUNT_INCOME_BY_MONTH'></LineChart>}
+    <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_INCOME_BY_MONTH_CHART'}
+                          insights={insights}
+                          metric={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}></MonthlyInsightsChart>
+    <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_SPEND_BY_MONTH_CHART'}
+                          insights={insights}
+                          metric={'TOTAL_ACCOUNT_SPEND_BY_MONTH'}></MonthlyInsightsChart>
     <div>{JSON.stringify(insights)}</div>
   </>
-
 }
