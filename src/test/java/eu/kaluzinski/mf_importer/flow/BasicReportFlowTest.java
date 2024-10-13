@@ -67,4 +67,30 @@ class BasicReportFlowTest {
     assertEquals(expectedInsightsAccount1, insightsAccount1);
     assertEquals(expectedInsightsAccount2, insightsAccount2);
   }
+
+  @Test
+  void shouldPrepareCategoryReport() {
+    //given
+    var fileName = "complex_import_data.csv";
+    var path = "%s%s".formatted(RESOURCES_PATH, fileName);
+
+    //when
+    var flow = FlowsProvider.categoryFlow("Investments");
+    var insightsAccount1 = flow.importAndGenerate(path, "mBank");
+    var insightsAccount2 = flow.importAndGenerate(path, "PKO");
+
+    var expectedInsightsAccount1 = new Insights(List.of(
+        new Insight(AVERAGE_SPEND_BY_MONTH, 1000.0),
+        new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
+            Map.of(YearMonth.parse("2024-02"), 1000.0))
+    ));
+    var expectedInsightsAccount2 = new Insights(List.of(
+        new Insight(AVERAGE_SPEND_BY_MONTH, 0.0),
+        new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH, emptyMap())
+    ));
+
+    //then
+    assertEquals(expectedInsightsAccount1, insightsAccount1);
+    assertEquals(expectedInsightsAccount2, insightsAccount2);
+  }
 }

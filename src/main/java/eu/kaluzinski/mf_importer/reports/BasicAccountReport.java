@@ -49,7 +49,7 @@ public class BasicAccountReport implements AccountReport {
             spendByMonthExcludingInvestments));
   }
 
-  private Double averageEntriesValueByMonth(List<AccountEntry> accountEntries) {
+  protected Double averageEntriesValueByMonth(List<AccountEntry> accountEntries) {
     return entriesGroupedByMonth(accountEntries)
         .entrySet()
         .parallelStream()
@@ -62,13 +62,13 @@ public class BasicAccountReport implements AccountReport {
     return sumAccountEntries(accountState.expenses());
   }
 
-  private List<AccountEntry> filterOutExpenseType(List<AccountEntry> entries,
+  protected List<AccountEntry> filterOutExpenseType(List<AccountEntry> entries,
       List<String> excludedCategories) {
     return entries.stream().filter(entry -> !excludedCategories.contains(entry.category().name()))
         .toList();
   }
 
-  private Map<YearMonth, Double> entriesGroupedByMonth(List<AccountEntry> entries) {
+  protected Map<YearMonth, Double> entriesGroupedByMonth(List<AccountEntry> entries) {
     return new TreeMap<>(groupAccountEntriesYearMonth(entries)
         .entrySet()
         .parallelStream()
@@ -88,11 +88,5 @@ public class BasicAccountReport implements AccountReport {
         .sum();
   }
 
-  private Double averageAccountEntries(List<AccountEntry> entries) {
-    return entries.stream()
-        .mapToDouble(AccountEntry::amount)
-        .average()
-        .orElseThrow();
-  }
 
 }

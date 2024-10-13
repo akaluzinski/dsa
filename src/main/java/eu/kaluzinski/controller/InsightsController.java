@@ -1,11 +1,13 @@
 package eu.kaluzinski.controller;
 
 import static eu.kaluzinski.mf_importer.flow.FlowsProvider.basicFlow;
+import static eu.kaluzinski.mf_importer.flow.FlowsProvider.categoryFlow;
 
 import eu.kaluzinski.mf_importer.converters.JsonConverter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(
@@ -22,12 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class InsightsController {
 
-  @GetMapping(value = "/insights", produces = "application/json")
-  public String sayHello() {
-    var insights = basicFlow().importAndGenerate("src/main/resources/import.csv", "mBank");
-    var stringifiedInsights = new JsonConverter().toJson(insights);
+  private static final String ALL = "all";
 
-    return stringifiedInsights;
+  @GetMapping(value = "/insights", produces = "application/json")
+  public String insights(@RequestParam(value = "category", defaultValue = ALL) String category) {
+    var flow = category.equals(ALL) ? basicFlow() : categoryFlow(category);
+    var insights = flow.importAndGenerate("src/main/resources/import.csv", "mBank");
+
+    return new JsonConverter().toJson(insights);
+
   }
 
 }

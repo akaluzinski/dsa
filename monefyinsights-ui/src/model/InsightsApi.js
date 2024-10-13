@@ -5,8 +5,12 @@ export class InsightsApi {
   constructor() {
   }
 
-  static async getInsights() {
-    return await fetch(InsightsApi.API_PATH)
+  static async getInsights(category = 'All') {
+    if (category === 'All') {
+      return await fetch(InsightsApi.API_PATH)
+    } else {
+      return await fetch(`${InsightsApi.API_PATH}?category=${category}`)
+    }
   }
 
 }

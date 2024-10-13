@@ -3,18 +3,22 @@ import * as d3 from "d3";
 
 const metricDateFormat = "%Y-%m"
 
-export function MonthlyInsightsChart({insights, chartId, metric}) {
+export function MonthlyInsightsChart({insights, chartId, metric, label}) {
   return <>
     <div id={chartId}/>
-    {insights.length && <LineChart dataPoints={insights} chartId={chartId}
-                                   metricName={metric}></LineChart>}
+    {insights.length && <LineChart dataPoints={insights}
+                                   chartId={chartId}
+                                   metricName={metric}
+                                   label={label}
+    ></LineChart>}
   </>
 }
 
 function LineChart({
   dataPoints,
   metricName,
-  chartId
+  chartId,
+  label = metricName
 }) {
   const createGraph = async () => {
     if (dataPoints.length === 0) {
@@ -31,8 +35,8 @@ function LineChart({
     }))
 
     const margin = {top: 60, right: 30, bottom: 30, left: 60}
-    const width = 460 - margin.left - margin.right
-    const height = 400 - margin.top - margin.bottom
+    const width = 800 - margin.left - margin.right
+    const height = 600 - margin.top - margin.bottom
 
     const svg = d3.select(`#${chartId}`)
     .append("svg")
@@ -70,7 +74,7 @@ function LineChart({
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .style("text-decoration", "underline")
-    .text(metricName);
+    .text(label);
   }
 
   useEffect(() => {
