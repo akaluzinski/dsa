@@ -20,7 +20,7 @@ export default function Insights() {
   }, []);
 
   return <>
-    <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_INCOME_BY_MONTH_CHART'}
+    <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}
                           insights={insights}
                           metric={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}></MonthlyInsightsChart>
     <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_SPEND_BY_MONTH_CHART'}
