@@ -7,6 +7,7 @@ import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
+import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH_EXCLUDING_INVESTMENTS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.YearMonth;
@@ -32,7 +33,9 @@ public class BasicAccountReportTest {
         new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH,
             Map.of(YearMonth.parse("2024-01"), 2210.0, YearMonth.parse("2024-02"), 1459.6)),
         new Insight(TOTAL_ACCOUNT_INCOME_BY_MONTH,
-            Map.of(YearMonth.parse("2024-01"), 10000.0))
+            Map.of(YearMonth.parse("2024-01"), 10000.0)),
+        new Insight(TOTAL_ACCOUNT_SPEND_BY_MONTH_EXCLUDING_INVESTMENTS,
+            Map.of(YearMonth.parse("2024-01"), 2210.0, YearMonth.parse("2024-02"), 1459.6))
     ), insights.insights());
   }
 }

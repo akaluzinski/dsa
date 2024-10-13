@@ -22,10 +22,14 @@ export default function Insights() {
   return <>
     <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}
                           insights={insights}
-                          metric={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}></MonthlyInsightsChart>
+                          metric={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}/>
+    <MonthlyInsightsChart
+        chartId={'TOTAL_ACCOUNT_SPEND_BY_MONTH_EXCLUDING_INVESTMENTS_CHART'}
+        insights={insights}
+        metric={'TOTAL_ACCOUNT_SPEND_BY_MONTH_EXCLUDING_INVESTMENTS'}/>
     <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_SPEND_BY_MONTH_CHART'}
                           insights={insights}
-                          metric={'TOTAL_ACCOUNT_SPEND_BY_MONTH'}></MonthlyInsightsChart>
+                          metric={'TOTAL_ACCOUNT_SPEND_BY_MONTH'}/>
     <div>{JSON.stringify(insights)}</div>
   </>
 }

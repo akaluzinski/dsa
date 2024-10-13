@@ -6,6 +6,8 @@ import static eu.kaluzinski.mf_importer.emums.Metric.AVERAGE_SPEND_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_INCOME_BY_MONTH;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND;
 import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH;
+import static eu.kaluzinski.mf_importer.emums.Metric.TOTAL_ACCOUNT_SPEND_BY_MONTH_EXCLUDING_INVESTMENTS;
+import static eu.kaluzinski.mf_importer.model.CategoryNames.investmentCategoryNames;
 import static java.util.stream.Collectors.groupingBy;
 
 import eu.kaluzinski.mf_importer.model.AccountEntry;
@@ -24,7 +26,9 @@ public class BasicAccountReport implements AccountReport {
   @Override
   public Insights create(AccountState accountState) {
     var expenses = accountState.expenses();
+    var expensesExcludingInvestments = filterOutExpenseType(expenses, investmentCategoryNames);
     var incomes = accountState.incomes();
+
     var averageSpendByMonth = averageEntriesValueByMonth(expenses);
     var averageIncomeByMonth = averageEntriesValueByMonth(incomes);
     var averageSavingByMonth = averageIncomeByMonth - averageSpendByMonth;
@@ -34,11 +38,15 @@ public class BasicAccountReport implements AccountReport {
     var averageSavingsByMonthInsight = Insight.of(AVERAGE_SAVINGS_BY_MONTH, averageSavingByMonth);
     var totalSpending = Insight.of(TOTAL_ACCOUNT_SPEND, totalSpending(accountState));
     var spendByMonth = Insight.of(TOTAL_ACCOUNT_SPEND_BY_MONTH, entriesGroupedByMonth(expenses));
+    var spendByMonthExcludingInvestments = Insight.of(
+        TOTAL_ACCOUNT_SPEND_BY_MONTH_EXCLUDING_INVESTMENTS,
+        entriesGroupedByMonth(expensesExcludingInvestments));
     var incomeByMonth = Insight.of(TOTAL_ACCOUNT_INCOME_BY_MONTH, entriesGroupedByMonth(incomes));
 
     return new Insights(
         List.of(averageSpendByMonthInsight, averageIncomeByMonthInsight,
-            averageSavingsByMonthInsight, totalSpending, spendByMonth, incomeByMonth));
+            averageSavingsByMonthInsight, totalSpending, spendByMonth, incomeByMonth,
+            spendByMonthExcludingInvestments));
   }
 
   private Double averageEntriesValueByMonth(List<AccountEntry> accountEntries) {
@@ -54,6 +62,11 @@ public class BasicAccountReport implements AccountReport {
     return sumAccountEntries(accountState.expenses());
   }
 
+  private List<AccountEntry> filterOutExpenseType(List<AccountEntry> entries,
+      List<String> excludedCategories) {
+    return entries.stream().filter(entry -> !excludedCategories.contains(entry.category().name()))
+        .toList();
+  }
 
   private Map<YearMonth, Double> entriesGroupedByMonth(List<AccountEntry> entries) {
     return new TreeMap<>(groupAccountEntriesYearMonth(entries)
