@@ -9,10 +9,9 @@ import java.util.List;
 public class MonefyTestUtils {
 
   public static final String RESOURCES_PATH = "src/test/resources/";
+  public static final String INVESTMENTS_CATEGORY = "Investments";
   public static List<String> IMPORT_HEADER = List.of("date", "account", "category", "amount",
       "currency", "converted amount", "currency", "description");
-
-
   public static List<AccountEntry> accountIncomeState = List.of(
       new AccountEntry(LocalDate.of(2024, 1, 1), new Category("Salary"), 10000.0, "", "mBank")
   );

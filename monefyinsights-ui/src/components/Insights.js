@@ -1,23 +1,12 @@
 import {useEffect, useState} from "react";
-import {InsightsApi} from "../model/InsightsApi";
 import {MonthlyInsightsChart} from "./charts/Charts";
-
-const investmentsCategoryName = 'Inwestycje'
-
-async function fetchInsights(categoryName) {
-  const result = await InsightsApi.getInsights(categoryName)
-  return await result.json()
-}
-
-function fetchCategory(callback, categoryName = 'All') {
-  fetchInsights(categoryName).then(({insights}) => callback(insights))
-}
+import {fetchBasicInsights} from "../services/insights_service";
+import CategoryInsights from "./CategoryInsights";
 
 export default function Insights() {
   const [insights, setInsights] = useState([])
-  const [investments, setInvestments] = useState([])
-  useEffect(() => fetchCategory(setInsights), []);
-  useEffect(() => fetchCategory(setInvestments, investmentsCategoryName), []);
+  const [categories, setCategories] = useState([])
+  useEffect(() => fetchBasicInsights(setInsights, setCategories), []);
 
   return <>
     <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}
@@ -34,12 +23,6 @@ export default function Insights() {
                           label={'Outcome incl. investments'}
                           metric={'TOTAL_ACCOUNT_SPEND_BY_MONTH'}/>
 
-    <MonthlyInsightsChart
-        chartId={'INVESTMENTS_TOTAL_ACCOUNT_SPEND_BY_MONTH_CHART'}
-        insights={investments}
-        label={'Investments'}
-        metric={'TOTAL_ACCOUNT_SPEND_BY_MONTH'}/>
-
-    <div>{JSON.stringify(insights)}</div>
+    <CategoryInsights categories={categories}></CategoryInsights>
   </>
 }

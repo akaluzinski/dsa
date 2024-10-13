@@ -46,7 +46,7 @@ public class BasicAccountReport implements AccountReport {
     return new Insights(
         List.of(averageSpendByMonthInsight, averageIncomeByMonthInsight,
             averageSavingsByMonthInsight, totalSpending, spendByMonth, incomeByMonth,
-            spendByMonthExcludingInvestments));
+            spendByMonthExcludingInvestments), buildMetadata(expenses));
   }
 
   protected Double averageEntriesValueByMonth(List<AccountEntry> accountEntries) {
@@ -74,6 +74,14 @@ public class BasicAccountReport implements AccountReport {
         .parallelStream()
         .collect(Collectors.toMap(Entry::getKey,
             yearMonthAccountEntries -> sumAccountEntries(yearMonthAccountEntries.getValue()))));
+  }
+
+  protected InsightsMetadata buildMetadata(List<AccountEntry> expenses) {
+    var expenseCategories = expenses.stream().map(expense -> expense.category().name()).sorted()
+        .distinct()
+        .toList();
+
+    return new InsightsMetadata(expenseCategories);
   }
 
   private Map<YearMonth, List<AccountEntry>> groupAccountEntriesYearMonth(

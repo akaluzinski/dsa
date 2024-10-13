@@ -25,7 +25,8 @@ public class CategoryReport extends BasicAccountReport {
     var categorySpendByMonthInsight = Insight.of(
         TOTAL_ACCOUNT_SPEND_BY_MONTH, entriesGroupedByMonth(categoryExpenses));
 
-    return new Insights(List.of(averageSpendByMonthInsight, categorySpendByMonthInsight));
+    return new Insights(List.of(averageSpendByMonthInsight, categorySpendByMonthInsight),
+        buildMetadata(categoryExpenses));
   }
 
   private List<AccountEntry> selectCategory(List<AccountEntry> entries,
