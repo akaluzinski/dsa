@@ -9,6 +9,10 @@ export default function Insights() {
   useEffect(() => fetchBasicInsights(setInsights, setCategories), []);
 
   return <>
+    <MonthlyInsightsChart chartId={'BASIC_COSTS_OF_LIVING'}
+                          insights={insights}
+                          label={'Costs of living'}
+                          metric={'BASIC_COSTS_OF_LIVING'}/>
     <MonthlyInsightsChart chartId={'TOTAL_ACCOUNT_INCOME_BY_MONTH'}
                           insights={insights}
                           label={'Income'}
@@ -22,6 +26,7 @@ export default function Insights() {
                           insights={insights}
                           label={'Outcome incl. investments'}
                           metric={'TOTAL_ACCOUNT_SPEND_BY_MONTH'}/>
+
 
     <CategoryInsights categories={categories}></CategoryInsights>
   </>
