@@ -4,22 +4,15 @@ public class UniqueCharactersFinder {
 
   private final int charactersSetSize = 128;
 
-  public boolean hasUnique(String text) {
-    if (text.length() > charactersSetSize) {
-      return false;
+    public boolean hasUnique(String text) {
+        if (text.length() > charactersSetSize) return false;
+        var seen = new boolean[charactersSetSize];
+        for (var c : text.toCharArray()) {
+            if (seen[c]) return false;
+            seen[c] = true;
+        }
+        return true;
     }
-
-    var charactersFound = new boolean[charactersSetSize];
-    for (int i = 0; i < text.length(); ++i) {
-      var character = text.charAt(i);
-      if (charactersFound[character]) {
-        return false;
-      }
-      charactersFound[character] = true;
-    }
-
-    return true;
-  }
 
 
 }

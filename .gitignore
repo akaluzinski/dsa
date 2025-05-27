@@ -5,3 +5,10 @@ build
 .target
 /target
 /.gradle/
+/build
+target
+/.idea/
+/.idea_modules/
+vscode
+/.vscode/
+/bin

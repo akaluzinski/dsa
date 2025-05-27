@@ -29,10 +29,9 @@ public class InsightsController {
   @GetMapping(value = "/insights", produces = "application/json")
   public String insights(@RequestParam(value = "category", defaultValue = ALL) String category) {
     var flow = category.equals(ALL) ? basicFlow() : categoryFlow(category);
-    var insights = flow.importAndGenerate("src/main/resources/import.csv", "mBank");
-
-    return new JsonConverter().toJson(insights);
-
+    return new JsonConverter().toJson(
+        flow.importAndGenerate("src/main/resources/import.csv", "mBank")
+    );
   }
 
 }
