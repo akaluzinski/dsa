@@ -12,55 +12,37 @@ import java.util.Map;
 
 public class CurrencyUnawareAccountDataMapper implements AccountDataMapper {
 
-  private static final String DATE_FORMAT = "dd.MM.yyyy";
-  private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
-  private final HeaderMapper headerMapper;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    private final HeaderMapper headerMapper;
 
-  public CurrencyUnawareAccountDataMapper(HeaderMapper headerMapper) {
-    this.headerMapper = headerMapper;
-  }
+    public CurrencyUnawareAccountDataMapper(HeaderMapper headerMapper) {
+        this.headerMapper = headerMapper;
+    }
 
-  public AccountState mapImportDataToAccountState(String accountName,
-      List<List<String>> rawImportData) {
-    var headers = headerMapper.mapHeaders(rawImportData.get(0));
-    var headersIndexes = headerMapper.getHeaderIndexes(headers);
+    public AccountState mapImportDataToAccountState(String accountName, List<List<String>> rawImportData) {
+        var headers = headerMapper.mapHeaders(rawImportData.get(0));
+        var idx = headerMapper.getHeaderIndexes(headers);
 
-    var accountEntries = rawImportData.subList(1, rawImportData.size())
-        .stream()
-        .map(rawEntry -> mapRawImportRowToAccountEntry(rawEntry, headersIndexes))
-        .filter(mappedEntry -> mappedEntry.accountName().equals(accountName))
-        .toList();
+        var incomes = new LinkedList<AccountEntry>();
+        var outcomes = new LinkedList<AccountEntry>();
 
-    var accountIncomes = new LinkedList<AccountEntry>();
-    var accountOutcomes = new LinkedList<AccountEntry>();
-    accountEntries.forEach(entry -> {
-      if (entry.amount() >= 0) {
-        accountIncomes.addLast(entry);
-      } else {
-        accountOutcomes.addLast(entry.toAbs());
-      }
-    });
+        rawImportData.stream().skip(1)
+            .map(row -> mapRow(row, idx))
+            .filter(e -> e.accountName().equals(accountName))
+            .forEach(e -> {
+                if (e.amount() >= 0) incomes.add(e);
+                else outcomes.add(e.toAbs());
+            });
 
-    var accountState = new AccountState(accountIncomes, accountOutcomes);
-    return accountState;
-  }
+        return new AccountState(incomes, outcomes);
+    }
 
-  private AccountEntry mapRawImportRowToAccountEntry(List<String> rawImportRow,
-      Map<Header, Integer> headersIndexes) {
-
-    // todo fix duplicates
-    var rawDate = rawImportRow.get(headersIndexes.get(Header.DATE));
-    var rawCategory = rawImportRow.get(headersIndexes.get(Header.CATEGORY));
-    var rawAmount = rawImportRow.get(headersIndexes.get(Header.AMOUNT));
-    var rawDescription = rawImportRow.get(headersIndexes.get(Header.DESCRIPTION));
-    var accountName = rawImportRow.get(headersIndexes.get(Header.ACCOUNT));
-
-    var parsedDate = LocalDate.parse(rawDate, DATE_FORMATTER);
-    var category = new Category(rawCategory);
-    var amount = Double.parseDouble(rawAmount);
-
-    return new AccountEntry(parsedDate, category, amount, rawDescription, accountName);
-  }
-
-
+    private AccountEntry mapRow(List<String> row, Map<Header, Integer> idx) {
+        var date = LocalDate.parse(row.get(idx.get(Header.DATE)), DATE_FORMATTER);
+        var category = new Category(row.get(idx.get(Header.CATEGORY)));
+        var amount = Double.parseDouble(row.get(idx.get(Header.AMOUNT)));
+        var desc = row.get(idx.get(Header.DESCRIPTION));
+        var account = row.get(idx.get(Header.ACCOUNT));
+        return new AccountEntry(date, category, amount, desc, account);
+    }
 }
